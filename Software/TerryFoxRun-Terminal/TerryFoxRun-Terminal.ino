@@ -4,10 +4,13 @@
 
 #include "xbm.h"
 #include "melody.h" 
+#include "fonts.h" 
 #include <TFT_eSPI.h>        // Hardware-specific library
 
+#define TEXT "Milad is running.."
 #define TIME_DELAY 200
-#define TIME_FAST_DELAY 100
+#define TIME_SHORT_DELAY 100
+#define TIME_LONG_DELAY 3000
 #define BUZZER_PIN WIO_BUZZER
 
 TFT_eSPI tft = TFT_eSPI();   // Invoke library
@@ -91,6 +94,19 @@ void setup() {
     tft.setSwapBytes(true);
 }
 
+void displayName(int timeDelay){
+    tft.setRotation(3);
+    tft.setTextDatum(MC_DATUM);
+    // Set text colour to orange with black background
+    tft.setTextColor(TFT_WHITE, TFT_BLACK);
+    tft.fillScreen(TFT_BLACK);              // Clear screen
+    tft.setFreeFont(FF18);                 // Select the font
+    tft.drawString(TEXT, 160, 120, GFXFF);
+    delay(timeDelay);   
+    tft.fillScreen(TFT_BLACK); 
+    tft.setRotation(0);
+}
+
 void displayIntro(int timeDelay){
   for(int i = 0; i <= (sizeof (bitmapIntroProperty) / sizeof (bitmapIntroProperty[0]))-1; i++){
     //Serial.println(bitmapIntroProperty[i].bitmapNumber);
@@ -163,7 +179,8 @@ void buzz(int targetPin, long frequency, long length) {
 }
 
 void loop() {
+    displayName(TIME_LONG_DELAY);
     displayIntro(TIME_DELAY);
-    displayColorful(TIME_FAST_DELAY);
+    displayColorful(TIME_SHORT_DELAY);
     displayMain(TIME_DELAY);
 }
